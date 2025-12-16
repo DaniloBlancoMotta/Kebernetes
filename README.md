@@ -1,72 +1,50 @@
-# Churn Prediction Service
+# Churn Prediction Service (Lesson 10)
 
-Serviço de predição de churn de clientes usando Machine Learning.
+This repository contains a Machine Learning service for predicting customer churn, deployed using Docker and Kubernetes.
 
-## Requisitos
+## Structure
 
-- Python 3.8+
-- Docker
-- Pipenv
+*   `predict.py`: Flask application for serving predictions.
+*   `model_C=10.bin`: Pre-trained Logistic Regression model.
+*   `Dockerfile`: Configuration for building the Docker image.
+*   `kubernetes/`: manifest files for Kubernetes deployment.
+    *   `deployment.yaml`: Defines the Deployment resource.
+    *   `service.yaml`: Defines the Service resource.
 
-## Instalação Local
+## Local Development
 
-```bash
-pipenv install
-pipenv shell
-python predict.py
-```
+1.  **Install dependencies**:
+    ```bash
+    pipenv install
+    ```
+
+2.  **Run locally**:
+    ```bash
+    pipenv shell
+    python predict.py
+    ```
 
 ## Docker
 
-### Build
+Build the image:
 ```bash
-docker build -t churn-prediction .
+docker build -t zoomcamp-model:v1 .
 ```
 
-### Run
+Run the container:
 ```bash
-docker run -p 9696:9696 churn-prediction
+docker run -it --rm -p 9696:9696 zoomcamp-model:v1
 ```
 
-## Teste
+## Kubernetes (Kind)
 
+Load image:
 ```bash
-python predict-test.py
+kind load docker-image zoomcamp-model:v1
 ```
 
-## API
-
-**Endpoint:** `POST /predict`
-
-**Exemplo de request:**
-```json
-{
-  "gender": "female",
-  "seniorcitizen": 0,
-  "partner": "yes",
-  "dependents": "no",
-  "phoneservice": "no",
-  "multiplelines": "no_phone_service",
-  "internetservice": "dsl",
-  "onlinesecurity": "no",
-  "onlinebackup": "yes",
-  "deviceprotection": "no",
-  "techsupport": "no",
-  "streamingtv": "no",
-  "streamingmovies": "no",
-  "contract": "month-to-month",
-  "paperlessbilling": "yes",
-  "paymentmethod": "electronic_check",
-  "tenure": 1,
-  "monthlycharges": 29.85,
-  "totalcharges": 29.85
-}
-```
-
-**Response:**
-```json
-{
-  "churn": true,
-  "churn_probability": 0.615
-}
+Apply manifests:
+```bash
+kubectl apply -f kubernetes/deployment.yaml
+kubectl apply -f kubernetes/service.yaml
 ```

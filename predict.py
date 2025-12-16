@@ -33,5 +33,4 @@ def predict():
     return jsonify(result) 
  
 if __name__ == "__main__":
-    app.run('http://localhost:8787/predict'
-    ) 
+    app.run(debug=True, host='0.0.0.0', port=9696) 
