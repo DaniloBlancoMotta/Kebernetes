@@ -1,4 +1,4 @@
-# Churn Prediction Service (Lesson 10)
+# Churn Prediction Service 
 
 This repository contains a Machine Learning service for predicting customer churn, deployed using Docker and Kubernetes.
 
